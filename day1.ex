@@ -3,27 +3,21 @@ defmodule AOC.Day1 do
   def solve_part1(input) do
     input
     |> String.split("\n")
-    |> Enum.reduce(0, fn line, acc -> acc + calc_fuel(line) end)
+    |> Enum.reduce(0, fn line, acc ->
+      acc + get_mass_from_line(line) |> calc_fuel()
+    end)
   end
 
-  defp calc_fuel(""), do: 0
-  defp calc_fuel(line) when is_binary(line) do
-    String.to_integer(line) |> calc_fuel()
-  end
-
-  defp calc_fuel(mass) when is_integer(mass) do
-    div(mass, 3) - 2
-  end
+  defp calc_fuel(mass), do: div(mass, 3) - 2
 
   # 4812287
   def solve_part2(input) do
     input
     |> String.split("\n")
-    |> Enum.reduce(0, fn line, acc -> acc + calc_fuel2(line) end)
+    |> Enum.reduce(0, fn line, acc ->
+      acc + get_mass_from_line(line) |> calc_fuel2()
+    end)
   end
-
-  defp calc_fuel2(""), do: 0
-  defp calc_fuel2(line), do: String.to_integer(line) |> calc_fuel2(0)
 
   defp calc_fuel2(mass, acc) do
     case div(mass, 3) - 2 do
@@ -31,5 +25,8 @@ defmodule AOC.Day1 do
       fuel -> calc_fuel2(fuel, acc + fuel)
     end
   end
+
+  defp get_mass_from_line(""), do: 0
+  defp get_mass_from_line(line), do: String.to_integer(line)
 end
 
